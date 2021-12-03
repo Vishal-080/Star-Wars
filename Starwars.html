@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Wars</title>
+    <style>
+        input {
+            width: 450px;
+            border:1px solid black;
+            text-indent: 25px;
+            color:white;
+            line-height: 35px;
+            font-size: 28px;
+            background-color: transparent;
+            border-radius: 15px;
+        }
+
+        body {
+            text-align: center;
+            background-image: url("https://images.hdqwalls.com/download/star-wars-4th-may-kt-1920x1080.jpg");
+        }
+
+        h1 {
+            font-size: 84px;
+            color: yellow;
+            letter-spacing: 4px;
+            text-shadow: 5px 5px black;
+        }
+
+        #data_div {
+            height: 200px;
+            font-size: 56px;
+            text-shadow: 6px 2px rgb(115, 255, 0);
+            letter-spacing: 3px;
+            text-decoration: underline;
+            background-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <audio>
+        <source src="https://youtu.be/_D0ZQPqeJkk" type="audio">
+    </audio>
+    <h1>STAR<br>WARS</h1>
+    <input type="text" oninput="debounce(main,1000)" id="query" placeholder="Search for a Star Wars character" />
+    <div id="data_div"></div>
+</body>
+
+</html>
+
+<script>
+
+    async function search(n) {
+
+        let res = await fetch(`https://swapi.dev/api/people/?search=${n}`)
+        let data = await res.json();
+        return data.results;
+        console.log(data.results);
+
+    }
+
+    async function main() {
+        let name = document.getElementById("query").value;
+
+        let name_data = await search(name);
+
+        if (name_data === undefined) {
+            return false;
+        }
+
+        append(name_data);
+        console.log("Name:", name_data);
+
+    }
+
+    // append all the data to the web page
+    let data_div = document.getElementById("data_div");
+
+    function append(m) {
+
+        data_div.innerHTML = null;
+        m.forEach(({ name }) => {
+
+            let p = document.createElement("p");
+
+            p.innerHTML = name;
+
+            data_div.append(p);
+        });
+    }
+
+    var timerId;
+    function debounce(func, delay) {
+        let name = document.getElementById("query").value;
+
+        if (name.length < 3) {
+            return false;
+        }
+
+        if (timerId) {
+            clearTimeout(timerId);
+        }
+
+        timerId = setTimeout(() => {
+            func();
+        }, delay);
+    }
+
+</script>
